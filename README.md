@@ -1,55 +1,43 @@
-# laravel_test
-## Task
- Implement an Authentication service, with 1. Registration 2. Login 3. Token generation for subsequent actions 4. Fetch user's data. This should be implemented in Laravel (lumen) your work will be judged based on 5 criteria.
+# NFT MARKETPLACE
 
-1. Does it work?
-2. Code Quality,
-3. Unit test coverage (>70%)
-4. API Documentation 
-5. Use of best practice
-
-## Documentation
-To read the documentation [follow this link](https://laraveltest3.docs.apiary.io/#)
+ An Ethereum smart contract written in solidity for buying and selling NFTs. It allows the user to deploy their personal NFT smart contract with royalty percentage enabled per NFT token minted. The marketplace smart contract allows for payments to be made using ERC 20 tokens or Ether. Integration with a backend using Node.js and frontend using React coming soon.
 
 ## Installation
 ### Install locally on your machine
 - Ensure you have installed on your machine:
-  - PHP server
-  - Apache server
-  - Mysql server
+  - Ganache
+  - Truffle
+  - Node.js
 
 #### Clone this repo
 
-```bash
-$ git clone https://github.com/prince-curie/test_laravel.git
-$ cd test_laravel
+```git
+$ git clone https://github.com/prince-curie/compliment.git
+$ cd compliment
 ```
 
 #### Install dependencies
 
-```bash
-$ composer install
+```node
+$ npm install
 ```
 
-#### Start the server
-
-starting the server locally on your machine
+#### Compile the Smart Contract
 
 ```bash
-$ php -S localhost:8000 -t public
+$ truffle compile
 ```
-Also start your database server
 
-#### Generate APP KEY
-  - hit the endpoint `localhost:8000/key` to generate a 32 bit key
-  - copy the open open your env file and place it as the velue to `APP_KEY`
+#### Deploy Smart Contract to Local Network
+  - Start running ganache
+  - Create a workspace
+  - Add the project to the workspace
+  - Ensure ganache port is set to 8545 abd set it if not
+  - Run the command `truffle migrate` on the terminal
 
-#### GENERATE JWT SECRET
-- run `php artisan jwt:secret`
- 
 ## Test
 - To run test
 ```bash
-$ php vendor/phpunit/phpunit/phpunit 
+$ truffle test 
 ```
 
