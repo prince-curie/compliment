@@ -16,6 +16,8 @@ contract('CreateNFT', accounts => {
             from: accounts[0]
         });
 
+        let tokenOwner = await nftContract.ownerOf.call(Number(transaction.logs[0].args.tokenId.toString()))
+        
         truffleAssert.eventEmitted(transaction, 'Transfer',(ev) => { 
             return ev.to === accounts[0] && ev.tokenId.toString() === Number(1).toString() 
         });
@@ -23,6 +25,8 @@ contract('CreateNFT', accounts => {
             return ev.owner === accounts[0] && ev.operator === marketContract.address &&
             ev.approved === true 
         });
+
+        assert.equal(accounts[0], tokenOwner);
     })
 
     it('should set tokenURI with hardcoded base URI', async() => {
@@ -71,10 +75,12 @@ contract('CreateNFT', accounts => {
         let exclude = await nftContract.setExcluded(true, Number(logs[0].args.tokenId.toString()), {
             from: accounts[0]
         })
+        let royalty = await nftContract.royaltyInfo.call(Number(logs[0].args.tokenId.toString()))
         
         await truffleAssert.eventEmitted(exclude, 'Excluded', (ev) => { 
             return ev.owner === accounts[0] && ev.tokenId.toString() === Number(logs[0].args.tokenId).toString()
         });
+        assert.equal(true, royalty.isExcluded)
     })
 
     it('should stop non token owner from excluding token from royalty', async() => {
@@ -116,7 +122,11 @@ contract('CreateNFT', accounts => {
         });
 
         let burn = await nftContract.burn(Number(logs[0].args.tokenId.toString()));
-        
+
+        await truffleAssert.reverts(
+            nftContract.ownerOf.call(Number(logs[0].args.tokenId.toString())), 
+            'ERC721: owner query for nonexistent token'
+        )
         await truffleAssert.eventEmitted(burn, 'Transfer');
     })
 })
