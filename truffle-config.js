@@ -18,10 +18,13 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-// const infuraKey = "fj4jll3k.....";
-//
-// const fs = require('fs');
+require('dotenv').config()
+
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const networkURI = "https://rinkeby.infura.io/v3/"
+const infuraKey = process.env.INFURA_KEY;
+const mnemonic = process.env.MNEMONIC
+
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
@@ -46,6 +49,7 @@ module.exports = {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
+     gas: 9721975,           // Gas sent with each transaction (default: ~6700000)
     },
     // Another network with more advanced options...
     // advanced: {
@@ -66,6 +70,10 @@ module.exports = {
     // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
+    rinkeby: {
+      provider: () => new HDWalletProvider(mnemonic, `${networkURI}/${infuraKey}`),
+      network_id: 4,
+    }
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
@@ -82,7 +90,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.6",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
