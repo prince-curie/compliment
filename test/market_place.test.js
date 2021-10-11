@@ -84,12 +84,16 @@ contract('MarketPlace', accounts => {
             {from: accounts[0]}
         )
 
+        let unSold = await marketContract.marketItems.call(Number(marketItem.logs[0].args.itemId.toString()))
+
         let sellerOldBalance = new BN(await web3.eth.getBalance(accounts[0]))
 
         let boughtItem = await marketContract.methods['buyItem(uint256)'](
             Number(marketItem.logs[0].args.itemId.toString()), 
             {'value': price, 'from': accounts[1]}
         )
+
+        let sold = await marketContract.marketItems.call(Number(marketItem.logs[0].args.itemId.toString()))
 
         let sellerNewBalance = new BN(await web3.eth.getBalance(accounts[0]))
         let buyerNewBalance = new BN(await web3.eth.getBalance(accounts[1]))
@@ -105,6 +109,7 @@ contract('MarketPlace', accounts => {
         assert.equal(true, buyerNewBalance.lt(buyerOldBalance))
         assert.equal(true, sellerNewBalance.gt(sellerOldBalance))
         assert.equal(true, sellerNewBalance.eq(sellerOldBalance.add(price)))
+        assert.notEqual(unSold.isSold, sold.isSold )
     })
 
     it('should revert if amount is less than selling price', async() => {
